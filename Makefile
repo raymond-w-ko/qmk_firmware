@@ -539,9 +539,10 @@ endif
 	$(foreach TEST,$(TESTS),$(RUN_TEST))
 	if [ -f $(ERROR_FILE) ]; then printf "$(MSG_ERRORS)" & exit 1; fi;
 
-# All should compile everything
 .PHONY: all
-all: all-keyboards test-all
+all: planck-rev4-raymond
+.PHONY: flash
+flash: planck-rev4-raymond-dfu
 
 # Define some shortcuts, mostly for compatibility with the old syntax
 .PHONY: all-keyboards
