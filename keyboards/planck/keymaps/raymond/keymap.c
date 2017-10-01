@@ -19,12 +19,33 @@
 
 extern keymap_config_t keymap_config;
 
-enum planck_layers { _QWERTY, _LOWER, _RAISE, _ADJUST };
+enum planck_layers { _QWERTY, _SEMIMAP, _LOWER, _RAISE, _ADJUST };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
+  SEMIMAP,
   LOWER,
   RAISE,
+  WINUNI,
+  WINCUNI,
+  OSXUNI,
+  LNXUNI,
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+  0x03b8, // θ
+  0x03c1, // ρ
+  0x03c6, // φ
+  0x03c7, // χ
+  0x03c3, // σ
+  0x03b2, // β
+  0x03c5, // υ
+  0x03c8, // ψ
+  0x03c0, // π
+  0x03b7, // η
+  0x03ba, // κ
+  0x03bd, // ν
+  0x03bc, // μ
 };
 
 // clang-format off
@@ -38,14 +59,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Shift |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |      |Space |Raise | Left | Down |  Up  |Right |
+ * | Ctrl | Alt  | GUI  | GUI  |Lower | Semi |Space |Raise | Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
   {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
-  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
-  {KC_LCTL, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
+  {KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC},
+  {KC_LCTL, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   SEMIMAP, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
+},
+
+/* Semimap */
+[_SEMIMAP] = {
+  {_______, X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),    KC_DEL},
+  {_______, KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   X(9),    KC_SCLN, X(10),   KC_LT,     _______, KC_ENT},
+  {_______, KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    X(11),   X(12),   _______, _______,   _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDOWN, KC_PGUP, KC_END}
 },
 
 
@@ -97,9 +126,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = {
-  {_______, RESET,   DEBUG,   _______, _______, _______, _______, TERM_ON, TERM_OFF,_______, _______, KC_DEL },
-  {_______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, _______, _______, _______},
-  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______},
+  {_______, RESET,   DEBUG,   _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, WINCUNI,  OSXUNI,  LNXUNI,  WINUNI, _______},
+  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  _______, _______, _______, _______, _______, _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 }
 
@@ -107,11 +136,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+void matrix_init_user() {
+  set_single_persistent_default_layer(_QWERTY);
+  set_unicode_input_mode(UC_LNX);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case QWERTY:
+    case SEMIMAP:
       if (record->event.pressed) {
-        set_single_persistent_default_layer(_QWERTY);
+        layer_on(_SEMIMAP);
+      } else {
+        layer_off(_SEMIMAP);
       }
       return false;
       break;
@@ -132,6 +168,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         layer_off(_RAISE);
         update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      }
+      return false;
+      break;
+    case WINUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_WIN);
+      }
+      return false;
+      break;
+    case WINCUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_WINC);
+      }
+      return false;
+      break;
+    case OSXUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_OSX);
+      }
+      return false;
+      break;
+    case LNXUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_LNX);
       }
       return false;
       break;
