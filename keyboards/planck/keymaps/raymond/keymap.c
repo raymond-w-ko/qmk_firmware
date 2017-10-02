@@ -30,22 +30,23 @@ enum planck_keycodes {
   WINCUNI,
   OSXUNI,
   LNXUNI,
+  ALTTAB,
 };
 
 const uint32_t PROGMEM unicode_map[] = {
-  0x03b8, // θ
-  0x03c1, // ρ
-  0x03c6, // φ
-  0x03c7, // χ
-  0x03c3, // σ
-  0x03b2, // β
-  0x03c5, // υ
-  0x03c8, // ψ
-  0x03c0, // π
-  0x03b7, // η
-  0x03ba, // κ
-  0x03bd, // ν
-  0x03bc, // μ
+    0x03b8,  // θ
+    0x03c1,  // ρ
+    0x03c6,  // φ
+    0x03c7,  // χ
+    0x03c3,  // σ
+    0x03b2,  // β
+    0x03c5,  // υ
+    0x03c8,  // ψ
+    0x03c0,  // π
+    0x03b7,  // η
+    0x03ba,  // κ
+    0x03bd,  // ν
+    0x03bc,  // μ
 };
 
 // clang-format off
@@ -71,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Semimap */
 [_SEMIMAP] = {
-  {_______, X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),    KC_DEL},
+  {ALTTAB,  X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),    KC_DEL},
   {_______, KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   X(9),    KC_SCLN, X(10),   KC_LT,     _______, KC_ENT},
   {_______, KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    X(11),   X(12),   _______, _______,   _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDOWN, KC_PGUP, KC_END}
@@ -141,13 +142,31 @@ void matrix_init_user() {
   set_unicode_input_mode(UC_LNX);
 }
 
+static uint16_t sending_alt = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case ALTTAB: {
+      if (!sending_alt) {
+        sending_alt = 1;
+        register_code(KC_LALT);
+      }
+      if (record->event.pressed) {
+        register_code(KC_TAB);
+      } else {
+        unregister_code(KC_TAB);
+      }
+      break;
+    }
     case SEMIMAP:
       if (record->event.pressed) {
         layer_on(_SEMIMAP);
       } else {
         layer_off(_SEMIMAP);
+        if (sending_alt) {
+          sending_alt = 0;
+          unregister_code(KC_LALT);
+        }
       }
       return false;
       break;
