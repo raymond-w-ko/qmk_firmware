@@ -54,10 +54,10 @@ void unicode_input_start (void) {
     break;
   case UC_LNX:
     register_code(KC_LCTL);
-    register_code(KC_LSFT);
+    /* register_code(KC_LSFT); */
     register_code(KC_U);
     unregister_code(KC_U);
-    unregister_code(KC_LSFT);
+    /* unregister_code(KC_LSFT); */
     unregister_code(KC_LCTL);
     break;
   case UC_WIN:
@@ -85,8 +85,10 @@ void unicode_input_finish (void) {
       unregister_code(KC_RALT);
       break;
     case UC_LNX:
-      register_code(KC_SPC);
-      unregister_code(KC_SPC);
+      /* When using IBus, codepoints are limited to 4 digits and do not require
+       * a terminating Space or Enter key. */
+      /* register_code(KC_SPC); */
+      /* unregister_code(KC_SPC); */
       break;
   }
 
