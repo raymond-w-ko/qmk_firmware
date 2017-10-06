@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void matrix_init_user() {
   set_single_persistent_default_layer(_QWERTY);
-  set_unicode_input_mode(UC_LNX);
+  set_unicode_input_mode(UC_WINC);
 }
 
 static uint16_t sending_alt = 0;
