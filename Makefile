@@ -588,3 +588,10 @@ BUILD_DATE := NA
 endif
 
 include $(ROOT_DIR)/testlist.mk
+
+.PHONY: all flash
+all:
+	make planck:raymond
+flash:
+	make planck:raymond:dfu
+.DEFAULT_GOAL := all
