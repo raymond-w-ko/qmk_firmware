@@ -21,18 +21,29 @@
 
 extern keymap_config_t keymap_config;
 
-enum planck_layers { _QWERTY, _SEMIMAP, _LOWER, _RAISE, _ADJUST };
+enum planck_layers { ALPH, SEMILAYER, SYMB, NUMS, FKEY };
 
 enum planck_keycodes {
-  QWERTY = SAFE_RANGE,
-  SEMIMAP,
-  ZEMIMAP,
+  SEMIKEY = SAFE_RANGE,
   LOWER,
   RAISE,
+
   WINUNI,
   WINCUNI,
   OSXUNI,
   LNXUNI,
+
+  MY_BELW,
+  MY_TERM,
+  MY_DEQL,  // /=
+  MY_MEQL,  // *=
+  MY_SEQL,  // -=
+  MY_PEQL,  // +=
+  MY_NEQL,  // !=
+  MY_LTGT,  // <>
+  MY_DPIP,  // ||
+  MY_DAMP,  // &&
+
   ALTTAB,
 };
 
@@ -54,143 +65,163 @@ const uint32_t PROGMEM unicode_map[] = {
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
-/* Qwerty
- * ,-----------------------------------------------------------------------------------.
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Shift |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | GUI  |Enter |  Del | Alt  |Lower | Ctrl |Space |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
-[_QWERTY] = {
-  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    SEMIMAP, KC_QUOT},
-  {KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC},
-  {KC_LGUI, KC_ENT,  KC_DEL,  KC_LALT, LOWER,   KC_LCTL, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
+[ALPH] = {
+{KC_Q,          KC_W,      KC_E,    KC_R,      KC_T,    KC_LBRC,        KC_RBRC, KC_Y,   KC_U,    KC_I,    KC_O,    KC_P},
+{KC_A,          KC_S,      KC_D,    KC_F,      KC_G,    KC_LPRN,        KC_RPRN, KC_H,   KC_J,    KC_K,    KC_L,    SEMIKEY},
+{SFT_T(KC_Z),   KC_X,      KC_C,    KC_V,      KC_B,    KC_LCBR,        KC_RCBR, KC_N,   KC_M,    KC_COMM, KC_DOT,  SFT_T(KC_SLSH)},
+{CTL_T(KC_TAB), OSL(FKEY), OSL(NUMS), OSL(SYMB), CTL_T(KC_ESC), ALT_T(KC_BSPC), KC_ENT,  KC_SPC, OSL(SYMB), _______, _______, _______}
 },
 
-/* Semimap */
-[_SEMIMAP] = {
-  {KC_TILD, X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),    KC_DEL},
-  {_______, KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   X(9),    KC_SCLN, X(10),   KC_LT,     _______, KC_ENT},
-  {_______, KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    X(11),   X(12),   _______, _______,   _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDOWN, KC_PGUP, KC_END}
+  
+[SEMILAYER] = {
+{X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),},
+{KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),   KC_SCLN, X(10),   KC_LT,     _______,},
+{KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    _______, _______, X(11),   X(12),   _______, _______,   _______,},
+{_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
-
-/* Lower
- * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | | Home | End  |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
- */
-[_LOWER] = {
-  {ALTTAB,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC},
-  {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE},
-  {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_HOME, KC_END,  _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______,    KC_MNXT,    KC_VOLD, KC_VOLU, KC_MPLY}
+[SYMB] = {
+{MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
+{KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO ,KC_QUOT, KC_HASH},
+{KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
+{XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
 },
 
-/* Raise
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |Pg Up |Pg Dn |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
- */
-[_RAISE] = {
-  {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC},
-  {KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS},
-  {_______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+[NUMS] = {
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, _______, _______, KC_COMM, KC_7, KC_8,   KC_9,   KC_SLSH},
+{KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL,  XXXXXXX, _______, _______, KC_LPRN, KC_4, KC_5,   KC_6,   KC_ASTR},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, _______, _______, KC_RPRN, KC_1, KC_2,   KC_3,   KC_MINS},
+{XXXXXXX, XXXXXXX, _______, TG(NUMS), _______, _______, _______, _______, KC_0, KC_DOT, KC_EQL, KC_PLUS}
 },
 
-/* Adjust (Lower + Raise)
- * ,-----------------------------------------------------------------------------------.
- * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|      |      |      |      |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|Musoff|MIDIon|MIDIof|      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      |      |      |      |      |
- * `-----------------------------------------------------------------------------------'
- */
-[_ADJUST] = {
-  {_______, RESET,   DEBUG,   _______, _______, _______, _______, _______, _______, _______, _______, _______},
-  {_______, _______, MU_MOD,  _______, _______, _______, _______, WINCUNI,  OSXUNI,  LNXUNI,  WINUNI, _______},
-  {_______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  _______, _______, _______, _______, _______, _______, _______},
-  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
+[FKEY] = {
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F9,   KC_F10,  KC_F11,  KC_F12},
+{KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F5,   KC_F6,   KC_F7,   KC_F8},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4},
+{XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX}
 }
 
-
-};
-// clang-format on
+};  // clang-format on
 
 void matrix_init_user() {
-  set_single_persistent_default_layer(_QWERTY);
+  set_single_persistent_default_layer(ALPH);
   set_unicode_input_mode(UC_LNX);
 }
 
-static uint16_t sending_alt = 0;
+void press_key(uint16_t key) {
+  register_code(key);
+  unregister_code(key);
+}
 
-static uint16_t in_semimap = 0;
+void press_two_keys(uint16_t key1, uint16_t key2) {
+  register_code(key1);
+  register_code(key2);
+  unregister_code(key2);
+  unregister_code(key1);
+}
+
+void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) {
+  register_code(key1);
+  register_code(key2);
+  register_code(key3);
+  unregister_code(key3);
+  unregister_code(key2);
+  unregister_code(key1);
+}
+
+bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MY_TERM:
+      if (record->event.pressed) {
+	press_three_keys(KC_LGUI, KC_LSFT, KC_ENT);
+      }
+
+      return false;
+
+    case MY_DEQL:  // /=
+      if (record->event.pressed) {
+	press_key(KC_SLSH);
+	press_key(KC_EQL);
+      }
+
+      return false;
+
+    case MY_MEQL:  // *=
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_ASTR);
+	press_key(KC_EQL);
+      }
+
+      return false;
+
+    case MY_SEQL:  // -=
+      if (record->event.pressed) {
+	press_key(KC_MINS);
+	press_key(KC_EQL);
+      }
+
+      return false;
+
+    case MY_PEQL:  // +=
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_PLUS);
+	press_key(KC_EQL);
+      }
+
+      return false;
+
+    case MY_NEQL:  // !=
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_EXLM);
+	press_key(KC_EQL);
+      }
+
+      return false;
+
+    case MY_LTGT:  // <>
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_LABK);
+	press_two_keys(KC_LSFT, KC_RABK);
+      }
+
+      return false;
+
+    case MY_DPIP:  // ||
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_PIPE);
+	press_two_keys(KC_LSFT, KC_PIPE);
+      }
+
+      return false;
+
+    case MY_DAMP:  // &&
+      if (record->event.pressed) {
+	press_two_keys(KC_LSFT, KC_AMPR);
+	press_two_keys(KC_LSFT, KC_AMPR);
+      }
+
+      return false;
+  }
+
+  return true;
+}
+
 static uint16_t allow_tap = 0;
 static uint16_t semi_timer = 0;
-static uint16_t z_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case SEMIMAP:
+    case SEMIKEY:
       if (record->event.pressed) {
-        semi_timer = timer_read();
-        allow_tap = 1;
-        layer_on(_SEMIMAP);
-        in_semimap = 1;
+	semi_timer = timer_read();
+	allow_tap = 1;
+	layer_on(SEMILAYER);
       } else {
-        layer_off(_SEMIMAP);
-        in_semimap = 0;
-        if (allow_tap && timer_elapsed(semi_timer) < TAP_DELAY) {
-          register_code(KC_SCLN);
-          unregister_code(KC_SCLN);
-        }
-      }
-      return false;
-      break;
-    case ZEMIMAP:
-      if (in_semimap) {
-        allow_tap = 0;
-        if (record->event.pressed) {
-          register_code(KC_LSFT);
-          register_code(KC_EQL);
-          unregister_code(KC_EQL);
-          unregister_code(KC_LSFT);
-        }
-      } else {
-        if (record->event.pressed) {
-          z_timer = timer_read();
-          allow_tap = 1;
-          layer_on(_SEMIMAP);
-        } else {
-          layer_off(_SEMIMAP);
-          if (allow_tap && timer_elapsed(z_timer) < TAP_DELAY) {
-            register_code(KC_Z);
-            unregister_code(KC_Z);
-          }
-        }
+	layer_off(SEMILAYER);
+	if (allow_tap && timer_elapsed(semi_timer) < TAP_DELAY) {
+	  register_code(KC_SCLN);
+	  unregister_code(KC_SCLN);
+	}
       }
       return false;
       break;
@@ -199,67 +230,71 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
   }
 
-  switch (keycode) {
-    case ALTTAB: {
-      if (!sending_alt) {
-        sending_alt = 1;
-        register_code(KC_LALT);
-      }
-      if (record->event.pressed) {
-        register_code(KC_TAB);
-      } else {
-        unregister_code(KC_TAB);
-      }
-      break;
-    }
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-        if (sending_alt) {
-          sending_alt = 0;
-          unregister_code(KC_LALT);
-        }
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case WINUNI:
-      if (record->event.pressed) {
-        set_unicode_input_mode(UC_WIN);
-      }
-      return false;
-      break;
-    case WINCUNI:
-      if (record->event.pressed) {
-        set_unicode_input_mode(UC_WINC);
-      }
-      return false;
-      break;
-    case OSXUNI:
-      if (record->event.pressed) {
-        set_unicode_input_mode(UC_OSX);
-      }
-      return false;
-      break;
-    case LNXUNI:
-      if (record->event.pressed) {
-        set_unicode_input_mode(UC_LNX);
-      }
-      return false;
-      break;
+  if (process_programmer_key_combos(keycode, record)) {
+    return true;
   }
+
+  /* switch (keycode) { */
+  /*   case ALTTAB: { */
+  /*     if (!sending_alt) { */
+  /*       sending_alt = 1; */
+  /*       register_code(KC_LALT); */
+  /*     } */
+  /*     if (record->event.pressed) { */
+  /*       register_code(KC_TAB); */
+  /*     } else { */
+  /*       unregister_code(KC_TAB); */
+  /*     } */
+  /*     break; */
+  /*   } */
+  /*   case LOWER: */
+  /*     if (record->event.pressed) { */
+  /*       layer_on(_LOWER); */
+  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
+  /*     } else { */
+  /*       layer_off(_LOWER); */
+  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
+  /*       if (sending_alt) { */
+  /*         sending_alt = 0; */
+  /*         unregister_code(KC_LALT); */
+  /*       } */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /*   case RAISE: */
+  /*     if (record->event.pressed) { */
+  /*       layer_on(_RAISE); */
+  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
+  /*     } else { */
+  /*       layer_off(_RAISE); */
+  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /*   case WINUNI: */
+  /*     if (record->event.pressed) { */
+  /*       set_unicode_input_mode(UC_WIN); */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /*   case WINCUNI: */
+  /*     if (record->event.pressed) { */
+  /*       set_unicode_input_mode(UC_WINC); */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /*   case OSXUNI: */
+  /*     if (record->event.pressed) { */
+  /*       set_unicode_input_mode(UC_OSX); */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /*   case LNXUNI: */
+  /*     if (record->event.pressed) { */
+  /*       set_unicode_input_mode(UC_LNX); */
+  /*     } */
+  /*     return false; */
+  /*     break; */
+  /* } */
   return true;
 }
