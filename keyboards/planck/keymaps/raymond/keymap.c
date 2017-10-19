@@ -21,7 +21,16 @@
 
 extern keymap_config_t keymap_config;
 
-enum planck_layers { ALPH, SEMILAYER, SYMB, NUMS, FKEY };
+enum planck_layers {
+  ALPH,
+  _LOWER,
+  _RAISE,
+  _ADJUST,
+  NUMS,
+  FKEY,
+  CURS,
+  SEMILAYER,
+};
 
 enum planck_keycodes {
   SEMIKEY = SAFE_RANGE,
@@ -44,8 +53,16 @@ enum planck_keycodes {
   MY_DPIP,  // ||
   MY_DAMP,  // &&
 
-  ALTTAB,
+  MY_ALT_TAB,
+  MY_TMUX_L,
+  MY_TMUX_R,
+  MY_I3_L,
+  MY_I3_R,
 };
+
+float winc_song[][2] = SONG(DOE_A_DEER);
+float osx_song[][2] = SONG(ODE_TO_JOY);
+float lnx_song[][2] = SONG(ZELDA_PUZZLE);
 
 const uint32_t PROGMEM unicode_map[] = {
     0x03b8,  // θ
@@ -66,23 +83,30 @@ const uint32_t PROGMEM unicode_map[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [ALPH] = {
-{KC_Q,          KC_W,      KC_E,    KC_R,      KC_T,    KC_LBRC,        KC_RBRC, KC_Y,   KC_U,    KC_I,    KC_O,    KC_P},
-{KC_A,          KC_S,      KC_D,    KC_F,      KC_G,    KC_LPRN,        KC_RPRN, KC_H,   KC_J,    KC_K,    KC_L,    SEMIKEY},
-{SFT_T(KC_Z),   KC_X,      KC_C,    KC_V,      KC_B,    KC_LCBR,        KC_RCBR, KC_N,   KC_M,    KC_COMM, KC_DOT,  SFT_T(KC_SLSH)},
-{CTL_T(KC_TAB), OSL(FKEY), OSL(NUMS), OSL(SYMB), CTL_T(KC_ESC), ALT_T(KC_BSPC), KC_ENT,  KC_SPC, OSL(SYMB), _______, _______, _______}
+{KC_Q,          KC_W,     KC_E,     KC_R,  KC_T,          KC_LBRC,        KC_RBRC, KC_Y,   KC_U,  KC_I,     KC_O,     KC_P},
+{KC_A,          KC_S,     KC_D,     KC_F,  KC_G,          KC_LPRN,        KC_RPRN, KC_H,   KC_J,  KC_K,     KC_L,     SEMIKEY},
+{SFT_T(KC_Z),   KC_X,     KC_C,     KC_V,  KC_B,          KC_LCBR,        KC_RCBR, KC_N,   KC_M,  KC_COMM,  KC_DOT,   SFT_T(KC_SLSH)},
+{GUI_T(KC_TAB), MO(FKEY), MO(NUMS), LOWER, CTL_T(KC_ESC), ALT_T(KC_BSPC), KC_ENT,  KC_SPC, RAISE, MO(CURS), TG(CURS), KC_LGUI}
 },
 
   
 [SEMILAYER] = {
-{X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC,   X(8),},
-{KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),   KC_SCLN, X(10),   KC_LT,     _______,},
-{KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    _______, _______, X(11),   X(12),   _______, _______,   _______,},
+{X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC, X(8),    },
+{KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),    KC_SCLN, X(10),   KC_LT,   _______, },
+{KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    _______, _______, X(11),   X(12),   _______, _______, _______, },
 {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
-[SYMB] = {
+[_LOWER] = {
 {MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
-{KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO ,KC_QUOT, KC_HASH},
+{KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
+{KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
+{XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
+},
+
+[_RAISE] = {
+{MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
+{KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
 {KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
 {XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
 },
@@ -99,7 +123,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 {KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F5,   KC_F6,   KC_F7,   KC_F8},
 {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4},
 {XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX}
-}
+},
+
+[CURS] = {
+  {KC_MPLY, MY_TMUX_L, KC_UP,   MY_TMUX_R, KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX},
+  {KC_VOLU, KC_LEFT,   KC_DOWN, KC_RGHT,   KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI,  KC_LSFT},
+  {KC_VOLD, MY_I3_L,   MY_TERM, MY_I3_R,   _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
+  {KC_MUTE, XXXXXXX,   XXXXXXX, _______,   _______, _______, _______, _______, _______, _______, _______,  XXXXXXX}
+},
+
+[_ADJUST] = {
+  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
+  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WINCUNI, OSXUNI,  LNXUNI,  WINUNI},
+  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
+  {XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX}
+},
 
 };  // clang-format on
 
@@ -131,73 +169,66 @@ void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) {
 
 bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case MY_TERM:
-      if (record->event.pressed) {
-	press_three_keys(KC_LGUI, KC_LSFT, KC_ENT);
-      }
-
-      return false;
-
     case MY_DEQL:  // /=
       if (record->event.pressed) {
-	press_key(KC_SLSH);
-	press_key(KC_EQL);
+        press_key(KC_SLSH);
+        press_key(KC_EQL);
       }
 
       return false;
 
     case MY_MEQL:  // *=
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_ASTR);
-	press_key(KC_EQL);
+        press_two_keys(KC_LSFT, KC_ASTR);
+        press_key(KC_EQL);
       }
 
       return false;
 
     case MY_SEQL:  // -=
       if (record->event.pressed) {
-	press_key(KC_MINS);
-	press_key(KC_EQL);
+        press_key(KC_MINS);
+        press_key(KC_EQL);
       }
 
       return false;
 
     case MY_PEQL:  // +=
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_PLUS);
-	press_key(KC_EQL);
+        press_two_keys(KC_LSFT, KC_PLUS);
+        press_key(KC_EQL);
       }
 
       return false;
 
     case MY_NEQL:  // !=
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_EXLM);
-	press_key(KC_EQL);
+        press_two_keys(KC_LSFT, KC_EXLM);
+        press_key(KC_EQL);
       }
 
       return false;
 
     case MY_LTGT:  // <>
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_LABK);
-	press_two_keys(KC_LSFT, KC_RABK);
+        press_two_keys(KC_LSFT, KC_LABK);
+        press_two_keys(KC_LSFT, KC_RABK);
       }
 
       return false;
 
     case MY_DPIP:  // ||
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_PIPE);
-	press_two_keys(KC_LSFT, KC_PIPE);
+        press_two_keys(KC_LSFT, KC_PIPE);
+        press_two_keys(KC_LSFT, KC_PIPE);
       }
 
       return false;
 
     case MY_DAMP:  // &&
       if (record->event.pressed) {
-	press_two_keys(KC_LSFT, KC_AMPR);
-	press_two_keys(KC_LSFT, KC_AMPR);
+        press_two_keys(KC_LSFT, KC_AMPR);
+        press_two_keys(KC_LSFT, KC_AMPR);
       }
 
       return false;
@@ -206,22 +237,116 @@ bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-static uint16_t allow_tap = 0;
+static uint8_t sending_alt = 0;
+
+bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MY_ALT_TAB: {
+      if (!sending_alt) {
+        sending_alt = 1;
+        register_code(KC_LALT);
+      }
+      if (record->event.pressed) {
+        register_code(KC_TAB);
+      } else {
+        unregister_code(KC_TAB);
+      }
+      break;
+    }
+
+    case WINUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_WIN);
+      }
+      return false;
+    case WINCUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_WINC);
+	PLAY_SONG(winc_song);
+      }
+      return false;
+    case OSXUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_OSX);
+	PLAY_SONG(osx_song);
+      }
+      return false;
+    case LNXUNI:
+      if (record->event.pressed) {
+        set_unicode_input_mode(UC_LNX);
+	PLAY_SONG(lnx_song);
+      }
+      return false;
+
+    case MY_TMUX_L:
+      if (record->event.pressed) {
+	press_two_keys(KC_LCTL, KC_SPC);
+	press_key(KC_P);
+      }
+      return false;
+    case MY_TMUX_R:
+      if (record->event.pressed) {
+	press_two_keys(KC_LCTL, KC_SPC);
+	press_key(KC_N);
+      }
+      return false;
+
+    case MY_TERM:
+      if (record->event.pressed) {
+        press_three_keys(KC_LGUI, KC_LSFT, KC_ENTER);
+      }
+      return false;
+    case MY_I3_L:
+      if (record->event.pressed) {
+        press_two_keys(KC_LGUI, KC_LEFT);
+      }
+      return false;
+    case MY_I3_R:
+      if (record->event.pressed) {
+        press_two_keys(KC_LGUI, KC_RGHT);
+      }
+      return false;
+  }
+
+  return true;
+}
+
+static uint8_t allow_tap = 0;
 static uint16_t semi_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case SEMIKEY:
       if (record->event.pressed) {
-	semi_timer = timer_read();
-	allow_tap = 1;
-	layer_on(SEMILAYER);
+        semi_timer = timer_read();
+        allow_tap = 1;
+        layer_on(SEMILAYER);
       } else {
-	layer_off(SEMILAYER);
-	if (allow_tap && timer_elapsed(semi_timer) < TAP_DELAY) {
-	  register_code(KC_SCLN);
-	  unregister_code(KC_SCLN);
-	}
+        layer_off(SEMILAYER);
+        if (allow_tap && timer_elapsed(semi_timer) < TAP_DELAY) {
+          register_code(KC_SCLN);
+          unregister_code(KC_SCLN);
+        }
+      }
+      return false;
+      break;
+    case LOWER:
+      if (record->event.pressed) {
+        layer_on(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      }
+      return false;
+      break;
+    case RAISE:
+      if (record->event.pressed) {
+        layer_on(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
@@ -230,71 +355,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
   }
 
-  if (process_programmer_key_combos(keycode, record)) {
-    return true;
-  }
+  uint8_t unintercepted = 0;
 
-  /* switch (keycode) { */
-  /*   case ALTTAB: { */
-  /*     if (!sending_alt) { */
-  /*       sending_alt = 1; */
-  /*       register_code(KC_LALT); */
-  /*     } */
-  /*     if (record->event.pressed) { */
-  /*       register_code(KC_TAB); */
-  /*     } else { */
-  /*       unregister_code(KC_TAB); */
-  /*     } */
-  /*     break; */
-  /*   } */
-  /*   case LOWER: */
-  /*     if (record->event.pressed) { */
-  /*       layer_on(_LOWER); */
-  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
-  /*     } else { */
-  /*       layer_off(_LOWER); */
-  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
-  /*       if (sending_alt) { */
-  /*         sending_alt = 0; */
-  /*         unregister_code(KC_LALT); */
-  /*       } */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /*   case RAISE: */
-  /*     if (record->event.pressed) { */
-  /*       layer_on(_RAISE); */
-  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
-  /*     } else { */
-  /*       layer_off(_RAISE); */
-  /*       update_tri_layer(_LOWER, _RAISE, _ADJUST); */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /*   case WINUNI: */
-  /*     if (record->event.pressed) { */
-  /*       set_unicode_input_mode(UC_WIN); */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /*   case WINCUNI: */
-  /*     if (record->event.pressed) { */
-  /*       set_unicode_input_mode(UC_WINC); */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /*   case OSXUNI: */
-  /*     if (record->event.pressed) { */
-  /*       set_unicode_input_mode(UC_OSX); */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /*   case LNXUNI: */
-  /*     if (record->event.pressed) { */
-  /*       set_unicode_input_mode(UC_LNX); */
-  /*     } */
-  /*     return false; */
-  /*     break; */
-  /* } */
+  unintercepted = process_my_keys(keycode, record);
+  if (!unintercepted) return unintercepted;
+
+  unintercepted = process_programmer_key_combos(keycode, record);
+  if (!unintercepted) return unintercepted;
+
   return true;
 }
