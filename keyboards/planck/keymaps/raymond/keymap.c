@@ -23,9 +23,9 @@ extern keymap_config_t keymap_config;
 
 enum planck_layers {
   ALPH,
-  _LOWER,
-  _RAISE,
-  _ADJUST,
+  LOWER,
+  RAISE,
+  ADJUST,
   NUMS,
   FKEY,
   CURS,
@@ -34,8 +34,8 @@ enum planck_layers {
 
 enum planck_keycodes {
   SEMIKEY = SAFE_RANGE,
-  LOWER,
-  RAISE,
+  LOWERKEY,
+  RAISEKEY,
 
   WINUNI,
   WINCUNI,
@@ -53,11 +53,11 @@ enum planck_keycodes {
   MY_DPIP,  // ||
   MY_DAMP,  // &&
 
-  MY_ALT_TAB,
-  MY_TMUX_L,
-  MY_TMUX_R,
-  MY_I3_L,
-  MY_I3_R,
+  ALT_TAB,
+  TMUX_L,
+  TMUX_R,
+  I3_L,
+  I3_R,
 };
 
 float winc_song[][2] = SONG(DOE_A_DEER);
@@ -86,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 {KC_Q,          KC_W,     KC_E,     KC_R,  KC_T,          KC_LBRC,        KC_RBRC, KC_Y,   KC_U,  KC_I,     KC_O,     KC_P},
 {KC_A,          KC_S,     KC_D,     KC_F,  KC_G,          KC_LPRN,        KC_RPRN, KC_H,   KC_J,  KC_K,     KC_L,     SEMIKEY},
 {SFT_T(KC_Z),   KC_X,     KC_C,     KC_V,  KC_B,          KC_LCBR,        KC_RCBR, KC_N,   KC_M,  KC_COMM,  KC_DOT,   SFT_T(KC_SLSH)},
-{GUI_T(KC_TAB), MO(FKEY), MO(NUMS), LOWER, CTL_T(KC_ESC), ALT_T(KC_BSPC), KC_ENT,  KC_SPC, RAISE, MO(CURS), TG(CURS), KC_LGUI}
+{GUI_T(KC_TAB), MO(FKEY), MO(NUMS), LOWERKEY, CTL_T(KC_ESC), ALT_T(KC_BSPC), KC_ENT,  KC_SPC, RAISEKEY, MO(CURS), TG(CURS), KC_LGUI}
 },
 
   
@@ -97,14 +97,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
-[_LOWER] = {
-{MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
-{KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
-{KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
+[LOWER] = {
+{XXXXXXX, TMUX_L,  KC_UP,   TMUX_R,  XXXXXXX, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
+{ALT_TAB, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
+{XXXXXXX, I3_L,    MY_TERM, I3_R,    XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
 {XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
 },
 
-[_RAISE] = {
+[RAISE] = {
 {MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
 {KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
 {KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
@@ -126,13 +126,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 },
 
 [CURS] = {
-  {KC_MPLY, MY_TMUX_L, KC_UP,   MY_TMUX_R, KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX},
-  {KC_VOLU, KC_LEFT,   KC_DOWN, KC_RGHT,   KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI,  KC_LSFT},
-  {KC_VOLD, MY_I3_L,   MY_TERM, MY_I3_R,   _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
-  {KC_MUTE, XXXXXXX,   XXXXXXX, _______,   _______, _______, _______, _______, _______, _______, _______,  XXXXXXX}
+  {KC_MPLY, TMUX_L,  KC_UP,   TMUX_R,  KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX},
+  {KC_VOLU, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI,  KC_LSFT},
+  {KC_VOLD, I3_L,    MY_TERM, I3_R,    _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
+  {KC_MUTE, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,  XXXXXXX}
 },
 
-[_ADJUST] = {
+[ADJUST] = {
   {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
   {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WINCUNI, OSXUNI,  LNXUNI,  WINUNI},
   {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
@@ -237,13 +237,13 @@ bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-static uint8_t sending_alt = 0;
+static bool sending_alt = 0;
 
 bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case MY_ALT_TAB: {
+    case ALT_TAB: {
       if (!sending_alt) {
-        sending_alt = 1;
+        sending_alt = true;
         register_code(KC_LALT);
       }
       if (record->event.pressed) {
@@ -278,13 +278,13 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
-    case MY_TMUX_L:
+    case TMUX_L:
       if (record->event.pressed) {
 	press_two_keys(KC_LCTL, KC_SPC);
 	press_key(KC_P);
       }
       return false;
-    case MY_TMUX_R:
+    case TMUX_R:
       if (record->event.pressed) {
 	press_two_keys(KC_LCTL, KC_SPC);
 	press_key(KC_N);
@@ -296,12 +296,12 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
         press_three_keys(KC_LGUI, KC_LSFT, KC_ENTER);
       }
       return false;
-    case MY_I3_L:
+    case I3_L:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_LEFT);
       }
       return false;
-    case MY_I3_R:
+    case I3_R:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_RGHT);
       }
@@ -311,7 +311,7 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-static uint8_t allow_tap = 0;
+static bool allow_tap = 0;
 static uint16_t semi_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -319,7 +319,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case SEMIKEY:
       if (record->event.pressed) {
         semi_timer = timer_read();
-        allow_tap = 1;
+        allow_tap = true;
         layer_on(SEMILAYER);
       } else {
         layer_off(SEMILAYER);
@@ -330,32 +330,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case LOWER:
+    case LOWERKEY:
       if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(LOWER);
+        update_tri_layer(LOWER, RAISE, ADJUST);
       } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        if (sending_alt) {
+          sending_alt = false;
+          unregister_code(KC_LALT);
+        }
+        layer_off(LOWER);
+        update_tri_layer(LOWER, RAISE, ADJUST);
       }
       return false;
       break;
-    case RAISE:
+    case RAISEKEY:
       if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(RAISE);
+        update_tri_layer(LOWER, RAISE, ADJUST);
       } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off(RAISE);
+        update_tri_layer(LOWER, RAISE, ADJUST);
       }
       return false;
       break;
     default:
-      allow_tap = 0;
+      allow_tap = false;
       break;
   }
 
-  uint8_t unintercepted = 0;
+  bool unintercepted = 0;
 
   unintercepted = process_my_keys(keycode, record);
   if (!unintercepted) return unintercepted;
