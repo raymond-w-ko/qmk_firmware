@@ -2,6 +2,8 @@ ifndef QUANTUM_DIR
 	include ../../../../Makefile
 endif
 
+BOOTMAGIC_ENABLE = no
+NKRO_ENABLE = yes
 CONSOLE_ENABLE = no
 UNICODE_ENABLE = no
 COMMAND_ENABLE = no
