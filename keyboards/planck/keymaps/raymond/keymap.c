@@ -60,7 +60,7 @@ enum planck_keycodes {
   I3_R,
 };
 
-float winc_song[][2] = SONG(DOE_A_DEER);
+float winc_song[][2] = SONG(ROCK_A_BYE_BABY);
 float osx_song[][2] = SONG(ODE_TO_JOY);
 float lnx_song[][2] = SONG(ZELDA_PUZZLE);
 
@@ -91,31 +91,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   
 [SEMILAYER] = {
-{X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC, X(8),    },
-{KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),    KC_SCLN, X(10),   KC_LT,   _______, },
-{KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    _______, _______, X(11),   X(12),   _______, _______, _______, },
-{_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
+{X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC, X(8)   },
+{KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),    KC_SCLN, X(10),   KC_LT,   _______},
+{KC_PLUS, X(3),    X(4),    KC_ENT,  X(5),    _______, _______, X(11),   X(12),   _______, _______, _______},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______}
 },
 
 [LOWER] = {
-{XXXXXXX, TMUX_L,  KC_UP,   TMUX_R,  XXXXXXX, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
+{KC_PSCR, TMUX_L,  KC_UP,   TMUX_R,  XXXXXXX, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
 {ALT_TAB, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
 {XXXXXXX, I3_L,    MY_TERM, I3_R,    XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
-{XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
+{XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, _______}
 },
 
 [RAISE] = {
 {MY_DEQL, MY_MEQL, MY_SEQL, MY_PEQL, MY_NEQL, XXXXXXX, XXXXXXX, MY_LTGT, KC_LABK, KC_RABK, KC_COLN, KC_DLR},
 {KC_SLSH, KC_ASTR, KC_MINS, KC_PLUS, KC_EQL,  XXXXXXX, KC_PIPE, MY_DPIP, KC_GRV,  KC_DQUO, KC_QUOT, KC_HASH},
 {KC_BSLS, KC_CIRC, KC_PERC, KC_UNDS, XXXXXXX, XXXXXXX, KC_AMPR, MY_DAMP, KC_TILD, KC_AT,   KC_EXLM, KC_QUES},
-{XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
+{XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX}
 },
 
 [NUMS] = {
-{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, _______, _______, KC_COMM, KC_7, KC_8,   KC_9,   KC_SLSH},
-{KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL,  XXXXXXX, _______, _______, KC_LPRN, KC_4, KC_5,   KC_6,   KC_ASTR},
-{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX, _______, _______, KC_RPRN, KC_1, KC_2,   KC_3,   KC_MINS},
-{XXXXXXX, XXXXXXX, _______, TG(NUMS), _______, _______, _______, _______, KC_0, KC_DOT, KC_EQL, KC_PLUS}
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_COMM, KC_7, KC_8,   KC_9,   KC_SLSH},
+{KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, KC_LPRN, KC_4, KC_5,   KC_6,   KC_ASTR},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_RPRN, KC_1, KC_2,   KC_3,   KC_MINS},
+{XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_0, KC_DOT, KC_EQL, KC_PLUS}
 },
 
 [FKEY] = {
@@ -126,17 +126,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 },
 
 [CURS] = {
-  {KC_MPLY, TMUX_L,  KC_UP,   TMUX_R,  KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX},
-  {KC_VOLU, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI,  KC_LSFT},
-  {KC_VOLD, I3_L,    MY_TERM, I3_R,    _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
-  {KC_MUTE, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______,  XXXXXXX}
+{KC_MPLY, TMUX_L,  KC_UP,   TMUX_R,  KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
+{KC_VOLU, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT},
+{KC_VOLD, I3_L,    MY_TERM, I3_R,    _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
+{KC_MUTE, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX}
 },
 
 [ADJUST] = {
-  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX},
-  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           WINCUNI,         OSXUNI,  LNXUNI,  WINUNI},
-  {XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MAGIC_UNHOST_NKRO, MAGIC_HOST_NKRO, XXXXXXX, XXXXXXX, XXXXXXX},
-  {XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           _______,         XXXXXXX, XXXXXXX, XXXXXXX}
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           WINCUNI,         OSXUNI,  LNXUNI,  WINUNI},
+{XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MAGIC_UNHOST_NKRO, MAGIC_HOST_NKRO, XXXXXXX, XXXXXXX, XXXXXXX},
+{XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,           _______,         XXXXXXX, XXXXXXX, XXXXXXX}
 },
 
 };  // clang-format on
@@ -262,32 +262,32 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
     case WINCUNI:
       if (record->event.pressed) {
         set_unicode_input_mode(UC_WINC);
-	PLAY_SONG(winc_song);
+        PLAY_SONG(winc_song);
       }
       return false;
     case OSXUNI:
       if (record->event.pressed) {
         set_unicode_input_mode(UC_OSX);
-	PLAY_SONG(osx_song);
+        PLAY_SONG(osx_song);
       }
       return false;
     case LNXUNI:
       if (record->event.pressed) {
         set_unicode_input_mode(UC_LNX);
-	PLAY_SONG(lnx_song);
+        PLAY_SONG(lnx_song);
       }
       return false;
 
     case TMUX_L:
       if (record->event.pressed) {
-	press_two_keys(KC_LCTL, KC_SPC);
-	press_key(KC_P);
+        press_two_keys(KC_LCTL, KC_SPC);
+        press_key(KC_P);
       }
       return false;
     case TMUX_R:
       if (record->event.pressed) {
-	press_two_keys(KC_LCTL, KC_SPC);
-	press_key(KC_N);
+        press_two_keys(KC_LCTL, KC_SPC);
+        press_key(KC_N);
       }
       return false;
 
