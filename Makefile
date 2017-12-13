@@ -601,7 +601,7 @@ include $(ROOT_DIR)/testlist.mk
 
 .PHONY: all flash
 all:
-	make planck:raymond
+	make planck/rev4:raymond
 flash:
-	make planck:raymond:dfu
+	make planck/rev4:raymond:dfu
 .DEFAULT_GOAL := all
