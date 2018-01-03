@@ -89,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 {GUI_T(KC_TAB), MO(FKEY), MO(NUMS), LOWERKEY, CTL_T(KC_ESC), KC_BSPC, KC_ENT,  KC_SPC, RAISEKEY, MO(CURS), TG(CURS), KC_LALT}
 },
 
-  
+
 [SEMILAYER] = {
 {X(0),    KC_BSLS, KC_EQL,  X(1),    KC_TILD, _______, _______, X(6),    X(7),    KC_TAB,  KC_BSPC, X(8)   },
 {KC_MINS, KC_UNDS, KC_COLN, X(2),    KC_GT,   _______, _______, X(9),    KC_SCLN, X(10),   KC_LT,   _______},
