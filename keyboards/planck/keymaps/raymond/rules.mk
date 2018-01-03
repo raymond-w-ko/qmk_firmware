@@ -5,7 +5,6 @@ endif
 # features I don't use
 BOOTMAGIC_ENABLE = no
 MOUSEKEY_ENABLE = no
-EXTRAKEY_ENABLE = no
 CONSOLE_ENABLE = no
 COMMAND_ENABLE = no
 BACKLIGHT_ENABLE = no
@@ -15,6 +14,8 @@ RGBLIGHT_ENABLE = no
 API_SYSEX_ENABLE = no
 SLEEP_LED_ENABLE = no
 
+# EXTRAKEY_ENABLE is needed for audio control keys
+EXTRAKEY_ENABLE = yes
 AUDIO_ENABLE = yes
 NKRO_ENABLE = yes
 UNICODE_ENABLE = no
