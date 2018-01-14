@@ -601,7 +601,13 @@ include $(ROOT_DIR)/testlist.mk
 
 .PHONY: all flash
 all:
-	make planck/rev4:raymond
-flash:
-	make planck/rev4:raymond:dfu
+	echo make [win | linux]
+win:
+	make RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond
+linux:
+	make RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond
+winflash:
+	make RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond:dfu
+linuxflash:
+	make RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
 .DEFAULT_GOAL := all

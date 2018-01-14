@@ -102,6 +102,12 @@ endif
 #CFLAGS += -Wsign-compare
 CFLAGS += -Wa,-adhlns=$(@:%.o=%.lst)
 CFLAGS += $(CSTANDARD)
+ifeq ($(RAY_KEYMAP_TARGET_WIN),true)
+    CFLAGS += -D RAY_KEYMAP_TARGET_WIN=1
+endif
+ifeq ($(RAY_KEYMAP_TARGET_LINUX),true)
+    CFLAGS += -D RAY_KEYMAP_TARGET_LINUX=1
+endif
 
 
 #---------------- Compiler Options C++ ----------------

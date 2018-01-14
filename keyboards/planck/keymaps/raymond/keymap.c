@@ -143,7 +143,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void matrix_init_user() {
   set_single_persistent_default_layer(ALPH);
+
+#if defined(RAY_KEYMAP_TARGET_LINUX)
   set_unicode_input_mode(UC_LNX);
+#elif defined(RAY_KEYMAP_TARGET_WIN)
+  set_unicode_input_mode(UC_WINC);
+#endif
 }
 
 void press_key(uint16_t key) {
