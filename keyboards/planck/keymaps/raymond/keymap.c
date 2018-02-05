@@ -357,15 +357,18 @@ bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(KC_LCTL);
         if (ctrl_allow_untap) {
+          rshift_allow_untap = false;
           register_code(KC_ESC);
           unregister_code(KC_ESC);
         }
       }
       return false;
     default:
-      lshift_allow_untap = false;
-      rshift_allow_untap = false;
-      ctrl_allow_untap = false;
+      if (record->event.pressed) {
+        lshift_allow_untap = false;
+        rshift_allow_untap = false;
+        ctrl_allow_untap = false;
+      }
       return true;
   }
 }
