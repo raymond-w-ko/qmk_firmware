@@ -37,13 +37,15 @@ enum planck_keycodes {
   LOWERKEY,
   RAISEKEY,
 
+  MY_SFT_Z,
+  MY_SFT_SL,
+  MY_CTL_ESC,
+
   WINUNI,
   WINCUNI,
   OSXUNI,
   LNXUNI,
 
-  MY_BELW,
-  MY_TERM,
   MY_DEQL,  // /=
   MY_MEQL,  // *=
   MY_SEQL,  // -=
@@ -60,7 +62,7 @@ enum planck_keycodes {
   I3_R,
 };
 
-float winc_song[][2] = SONG(ROCK_A_BYE_BABY);
+float winc_song[][2] = SONG(IMPERIAL_MARCH);
 float osx_song[][2] = SONG(ODE_TO_JOY);
 float lnx_song[][2] = SONG(ZELDA_PUZZLE);
 
@@ -83,10 +85,10 @@ const uint32_t PROGMEM unicode_map[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [ALPH] = {
-{KC_Q,          KC_W,     KC_E,     KC_R,     KC_T,          KC_LBRC, KC_RBRC, KC_Y,   KC_U,     KC_I,     KC_O,     KC_P},
-{KC_A,          KC_S,     KC_D,     KC_F,     KC_G,          KC_LPRN, KC_RPRN, KC_H,   KC_J,     KC_K,     KC_L,     SEMIKEY},
-{SFT_T(KC_Z),   KC_X,     KC_C,     KC_V,     KC_B,          KC_LCBR, KC_RCBR, KC_N,   KC_M,     KC_COMM,  KC_DOT,   SFT_T(KC_SLSH)},
-{GUI_T(KC_TAB), MO(FKEY), MO(NUMS), LOWERKEY, CTL_T(KC_ESC), KC_BSPC, KC_ENT,  KC_SPC, RAISEKEY, MO(CURS), TG(CURS), KC_LALT}
+{KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,       KC_LBRC, KC_RBRC, KC_Y,   KC_U,     KC_I,     KC_O,    KC_P},
+{KC_A,     KC_S,     KC_D,     KC_F,     KC_G,       KC_LPRN, KC_RPRN, KC_H,   KC_J,     KC_K,     KC_L,    SEMIKEY},
+{MY_SFT_Z, KC_X,     KC_C,     KC_V,     KC_B,       KC_LCBR, KC_RCBR, KC_N,   KC_M,     KC_COMM,  KC_DOT,  MY_SFT_SL},
+{KC_TAB,   MO(FKEY), MO(NUMS), LOWERKEY, MY_CTL_ESC, KC_BSPC, KC_ENT,  KC_SPC, RAISEKEY, MO(CURS), KC_LALT, KC_LGUI}
 },
 
 
@@ -126,10 +128,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 },
 
 [CURS] = {
-{KC_MPLY, TMUX_L,  KC_UP,   TMUX_R,  KC_PGUP, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
-{KC_VOLU, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______, _______, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT},
-{KC_VOLD, I3_L,    MY_TERM, I3_R,    _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LSFT},
-{KC_MUTE, XXXXXXX, XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX}
+{KC_MPLY, TMUX_L,  KC_UP,     TMUX_R,  KC_PGUP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
+{KC_VOLU, KC_LEFT, KC_DOWN,   KC_RGHT, KC_PGDN, XXXXXXX, XXXXXXX, XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT},
+{KC_VOLD, I3_L,    S(KC_INS), I3_R,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX},
+{KC_MUTE, XXXXXXX, XXXXXXX,   _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX}
 },
 
 [ADJUST] = {
@@ -246,6 +248,7 @@ static bool sending_alt = 0;
 
 bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    // alt+tab emulation
     case ALT_TAB: {
       if (!sending_alt) {
         sending_alt = true;
@@ -259,6 +262,7 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
       break;
     }
 
+    // unicode mode switching keys
     case WINUNI:
       if (record->event.pressed) {
         set_unicode_input_mode(UC_WIN);
@@ -283,6 +287,7 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
 
+    // tmux + i3 navigation keys
     case TMUX_L:
       if (record->event.pressed) {
         press_two_keys(KC_LCTL, KC_SPC);
@@ -293,12 +298,6 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed) {
         press_two_keys(KC_LCTL, KC_SPC);
         press_key(KC_N);
-      }
-      return false;
-
-    case MY_TERM:
-      if (record->event.pressed) {
-        press_three_keys(KC_LGUI, KC_LSFT, KC_ENTER);
       }
       return false;
     case I3_L:
@@ -314,6 +313,61 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   }
 
   return true;
+}
+
+static bool lshift_allow_untap = false;
+static bool rshift_allow_untap = false;
+static bool ctrl_allow_untap = false;
+
+bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MY_SFT_Z:
+      rshift_allow_untap = false;
+
+      if (record->event.pressed) {
+        lshift_allow_untap = true;
+        register_code(KC_LSFT);
+      } else {
+        unregister_code(KC_LSFT);
+        if (lshift_allow_untap) {
+          lshift_allow_untap = false;
+          register_code(KC_Z);
+          unregister_code(KC_Z);
+        }
+      }
+      return false;
+    case MY_SFT_SL:
+      lshift_allow_untap = false;
+      if (record->event.pressed) {
+        rshift_allow_untap = true;
+        register_code(KC_RSFT);
+      } else {
+        unregister_code(KC_RSFT);
+        if (rshift_allow_untap) {
+          rshift_allow_untap = false;
+          register_code(KC_SLSH);
+          unregister_code(KC_SLSH);
+        }
+      }
+      return false;
+    case MY_CTL_ESC:
+      if (record->event.pressed) {
+        ctrl_allow_untap = true;
+        register_code(KC_LCTL);
+      } else {
+        unregister_code(KC_LCTL);
+        if (ctrl_allow_untap) {
+          register_code(KC_ESC);
+          unregister_code(KC_ESC);
+        }
+      }
+      return false;
+    default:
+      lshift_allow_untap = false;
+      rshift_allow_untap = false;
+      ctrl_allow_untap = false;
+      return true;
+  }
 }
 
 static bool allow_tap = 0;
@@ -367,6 +421,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   bool unintercepted = 0;
 
   unintercepted = process_my_keys(keycode, record);
+  if (!unintercepted) return unintercepted;
+
+  unintercepted = process_mod_tap_keys(keycode, record);
   if (!unintercepted) return unintercepted;
 
   unintercepted = process_programmer_key_combos(keycode, record);
