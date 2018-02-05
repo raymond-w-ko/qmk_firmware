@@ -599,15 +599,15 @@ endif
 
 include $(ROOT_DIR)/testlist.mk
 
-.PHONY: all flash
+.PHONY: all win linux winflash linuxflash
 all:
 	echo make [win | linux]
 win:
-	make RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond
 linux:
-	make RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond
 winflash:
-	make RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond:dfu
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond:dfu
 linuxflash:
-	make RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
 .DEFAULT_GOAL := all
