@@ -323,6 +323,7 @@ bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MY_SFT_Z:
       rshift_allow_untap = false;
+      ctrl_allow_untap = false;
 
       if (record->event.pressed) {
         lshift_allow_untap = true;
@@ -338,6 +339,8 @@ bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
       return false;
     case MY_SFT_SL:
       lshift_allow_untap = false;
+      ctrl_allow_untap = false;
+
       if (record->event.pressed) {
         rshift_allow_untap = true;
         register_code(KC_RSFT);
