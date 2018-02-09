@@ -153,28 +153,28 @@ void matrix_init_user() {
 #endif
 }
 
-void press_key(uint16_t key) {
+static void press_key(uint16_t key) {
   register_code(key);
   unregister_code(key);
 }
 
-void press_two_keys(uint16_t key1, uint16_t key2) {
+static void press_two_keys(uint16_t key1, uint16_t key2) {
   register_code(key1);
   register_code(key2);
   unregister_code(key2);
   unregister_code(key1);
 }
 
-void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) {
-  register_code(key1);
-  register_code(key2);
-  register_code(key3);
-  unregister_code(key3);
-  unregister_code(key2);
-  unregister_code(key1);
-}
+/* static void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) { */
+/*   register_code(key1); */
+/*   register_code(key2); */
+/*   register_code(key3); */
+/*   unregister_code(key3); */
+/*   unregister_code(key2); */
+/*   unregister_code(key1); */
+/* } */
 
-bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
+static bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MY_DEQL:  // /=
       if (record->event.pressed) {
@@ -246,7 +246,7 @@ bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
 
 static bool sending_alt = 0;
 
-bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
+static bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     // alt+tab emulation
     case ALT_TAB: {
@@ -315,63 +315,75 @@ bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-static bool lshift_allow_untap = false;
-static bool rshift_allow_untap = false;
-static bool ctrl_allow_untap = false;
 
-bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
+static bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
+  static bool lshift_pressed = false;
+  static bool rshift_pressed = false;
+
+  static bool lshift_allow_transform = false;
+  static bool rshift_allow_transform = false;
+  static bool ctrl_allow_transform = false;
+  if (record->event.pressed) {
+    if (keycode != MY_SFT_Z) lshift_allow_transform = false;
+    if (keycode != MY_SFT_SL) rshift_allow_transform = false;
+    if (keycode != MY_CTL_ESC) ctrl_allow_transform = false;
+  }
+
   switch (keycode) {
     case MY_SFT_Z:
-      rshift_allow_untap = false;
-      ctrl_allow_untap = false;
-
       if (record->event.pressed) {
-        lshift_allow_untap = true;
-        register_code(KC_LSFT);
+        lshift_allow_transform = true;
+        if (!rshift_pressed) {
+          register_code(KC_LSFT);
+          lshift_pressed = true;
+        }
       } else {
-        unregister_code(KC_LSFT);
-        if (lshift_allow_untap) {
-          lshift_allow_untap = false;
+        if (lshift_pressed) {
+          unregister_code(KC_LSFT);
+          lshift_pressed = false;
+        }
+        if (lshift_allow_transform) {
+          lshift_allow_transform = false;
           register_code(KC_Z);
           unregister_code(KC_Z);
         }
       }
+
       return false;
     case MY_SFT_SL:
-      lshift_allow_untap = false;
-      ctrl_allow_untap = false;
-
       if (record->event.pressed) {
-        rshift_allow_untap = true;
-        register_code(KC_RSFT);
+        rshift_allow_transform = true;
+        if (!lshift_pressed) {
+          register_code(KC_RSFT);
+          rshift_pressed = true;
+        }
       } else {
-        unregister_code(KC_RSFT);
-        if (rshift_allow_untap) {
-          rshift_allow_untap = false;
+        if (rshift_pressed) {
+          unregister_code(KC_RSFT);
+          rshift_pressed = false;
+        }
+        if (rshift_allow_transform) {
+          rshift_allow_transform = false;
           register_code(KC_SLSH);
           unregister_code(KC_SLSH);
         }
       }
+
       return false;
     case MY_CTL_ESC:
       if (record->event.pressed) {
-        ctrl_allow_untap = true;
         register_code(KC_LCTL);
+        ctrl_allow_transform = true;
       } else {
         unregister_code(KC_LCTL);
-        if (ctrl_allow_untap) {
-          rshift_allow_untap = false;
+        if (ctrl_allow_transform) {
+          rshift_allow_transform = false;
           register_code(KC_ESC);
           unregister_code(KC_ESC);
         }
       }
       return false;
     default:
-      if (record->event.pressed) {
-        lshift_allow_untap = false;
-        rshift_allow_untap = false;
-        ctrl_allow_untap = false;
-      }
       return true;
   }
 }
@@ -426,10 +438,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   bool unintercepted = 0;
 
-  unintercepted = process_my_keys(keycode, record);
+  unintercepted = process_mod_tap_keys(keycode, record);
   if (!unintercepted) return unintercepted;
 
-  unintercepted = process_mod_tap_keys(keycode, record);
+  unintercepted = process_my_keys(keycode, record);
   if (!unintercepted) return unintercepted;
 
   unintercepted = process_programmer_key_combos(keycode, record);
