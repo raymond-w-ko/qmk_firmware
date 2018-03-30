@@ -165,7 +165,8 @@ static void press_two_keys(uint16_t key1, uint16_t key2) {
   unregister_code(key1);
 }
 
-/* static void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) { */
+/* static void press_three_keys(uint16_t key1, uint16_t key2, uint16_t key3) {
+ */
 /*   register_code(key1); */
 /*   register_code(key2); */
 /*   register_code(key3); */
@@ -174,7 +175,8 @@ static void press_two_keys(uint16_t key1, uint16_t key2) {
 /*   unregister_code(key1); */
 /* } */
 
-static bool process_programmer_key_combos(uint16_t keycode, keyrecord_t *record) {
+static bool process_programmer_key_combos(uint16_t keycode,
+                                          keyrecord_t *record) {
   switch (keycode) {
     case MY_DEQL:  // /=
       if (record->event.pressed) {
@@ -315,7 +317,6 @@ static bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-
 static bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
   static bool lshift_pressed = false;
   static bool rshift_pressed = false;
@@ -331,41 +332,55 @@ static bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
 
   switch (keycode) {
     case MY_SFT_Z:
-      if (record->event.pressed) {
-        lshift_allow_transform = true;
-        if (!rshift_pressed) {
-          register_code(KC_LSFT);
-          lshift_pressed = true;
-        }
-      } else {
-        if (lshift_pressed) {
-          unregister_code(KC_LSFT);
-          lshift_pressed = false;
-        }
-        if (lshift_allow_transform) {
-          lshift_allow_transform = false;
+      if (rshift_pressed) {
+        if (record->event.pressed) {
           register_code(KC_Z);
           unregister_code(KC_Z);
+        }
+      } else {
+        if (record->event.pressed) {
+          lshift_allow_transform = true;
+          if (!rshift_pressed) {
+            register_code(KC_LSFT);
+            lshift_pressed = true;
+          }
+        } else {
+          if (lshift_pressed) {
+            unregister_code(KC_LSFT);
+            lshift_pressed = false;
+          }
+          if (lshift_allow_transform) {
+            lshift_allow_transform = false;
+            register_code(KC_Z);
+            unregister_code(KC_Z);
+          }
         }
       }
 
       return false;
     case MY_SFT_SL:
-      if (record->event.pressed) {
-        rshift_allow_transform = true;
-        if (!lshift_pressed) {
-          register_code(KC_RSFT);
-          rshift_pressed = true;
-        }
-      } else {
-        if (rshift_pressed) {
-          unregister_code(KC_RSFT);
-          rshift_pressed = false;
-        }
-        if (rshift_allow_transform) {
-          rshift_allow_transform = false;
+      if (lshift_pressed) {
+        if (record->event.pressed) {
           register_code(KC_SLSH);
           unregister_code(KC_SLSH);
+        }
+      } else {
+        if (record->event.pressed) {
+          rshift_allow_transform = true;
+          if (!lshift_pressed) {
+            register_code(KC_RSFT);
+            rshift_pressed = true;
+          }
+        } else {
+          if (rshift_pressed) {
+            unregister_code(KC_RSFT);
+            rshift_pressed = false;
+          }
+          if (rshift_allow_transform) {
+            rshift_allow_transform = false;
+            register_code(KC_SLSH);
+            unregister_code(KC_SLSH);
+          }
         }
       }
 
