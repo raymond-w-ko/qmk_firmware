@@ -607,13 +607,24 @@ include $(ROOT_DIR)/testlist.mk
 
 .PHONY: all win linux winflash linuxflash
 all:
-	echo make [win | linux]
-win:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond
-linux:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond
-winflash:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond:dfu
-linuxflash:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
+	echo Look at the end of Makefile and choose a target!!!
+
+planck-win:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond
+planck-linux:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond
+planck-win-flash:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true planck/rev4:raymond:dfu
+planck-linux-flash:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
+
+iris-win:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true iris/rev2:raymond
+iris-linux:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true iris/rev2:raymond
+iris-win-flash:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true iris/rev2:raymond:avrdude
+iris-linux-flash:
+	exec make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true iris/rev2:raymond:avrdude
+
 .DEFAULT_GOAL := all
