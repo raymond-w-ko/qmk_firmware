@@ -454,22 +454,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     case KC_rNOR:
-      default_layer_set(1UL << _QWERTY);
-      is_in_game_layer = false;
+      if (record->event.pressed) {
+        default_layer_set(1UL << _QWERTY);
+        is_in_game_layer = false;
+      }
       return false;
       break;
     case KC_rGAM:
-      default_layer_set(1UL << _GAME);
-      is_in_game_layer = true;
+      if (record->event.pressed) {
+        default_layer_set(1UL << _GAME);
+        is_in_game_layer = true;
+      }
       return false;
       break;
     case KC_rTOG:
-      if (is_in_game_layer) {
-        is_in_game_layer = false;
-        default_layer_set(1UL << _QWERTY);
-      } else {
-        is_in_game_layer = true;
-        default_layer_set(1UL << _GAME);
+      if (record->event.pressed) {
+        if (is_in_game_layer) {
+          is_in_game_layer = false;
+          default_layer_set(1UL << _QWERTY);
+        } else {
+          is_in_game_layer = true;
+          default_layer_set(1UL << _GAME);
+        }
       }
       return false;
       break;
