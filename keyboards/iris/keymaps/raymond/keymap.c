@@ -7,9 +7,10 @@
 extern keymap_config_t keymap_config;
 
 #define _QWERTY 0
-#define _LOWER 1
-#define _RAISE 2
-#define _SEMI 3
+#define _GAME 1
+#define _LOWER 2
+#define _RAISE 3
+#define _SEMI 4
 #define _ADJUST 16
 
 enum custom_keycodes {
@@ -35,6 +36,10 @@ enum custom_keycodes {
   KC_tmuR,
   KC_I3_L,
   KC_I3_R,
+
+  KC_rNOR,
+  KC_rGAM,
+  KC_rTOG,
 
   KC_NKRO,
 };
@@ -114,13 +119,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //                  `----+----+----'        `----+----+----'
   ),
 
+  [_GAME] = LAYOUT_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+     ESC , 5  , 1  , 2  , 3  , 4  ,                6  , 7  , 8  , 9  , 0  ,BSPC,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+      T  , TAB, Q  , W  , E  , R  ,                Y  , U  , I  , O  , P  ,DEL ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+      G  ,LCTL, A  , S  , D  , F  ,                H  , J  , K  , L  ,rSMI,QUOT,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+      B  ,LSFT, Z  , X  , C  , V  ,LCTL,     LCTL, N  , M  ,COMM,DOT ,RSFT,SLSH,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                       LALT,LOWR,SPC ,         SPC ,RASE,LALT
+  //                  `----+----+----'        `----+----+----'
+  ),
+
   [_LOWER] = LAYOUT_kc(
   //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
      TILD,EXLM, AT ,HASH,DLR ,PERC,               CIRC,AMPR,ASTR,LPRN,RPRN,BSPC,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      VOLU,PSCR,tmuL,UP  ,tmuR,    ,                   ,    ,    ,COLN,DLR ,    ,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
-     VOLD,rA_T,LEFT,DOWN,RIGHT,   ,               r_DP,GRV ,DQUO,QUOT,HASH,    ,
+     VOLD,rA_T,LEFT,DOWN,RGHT,rTOG,               r_DP,GRV ,DQUO,QUOT,HASH,    ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
      MUTE,    ,I3_L,    ,I3_R,    ,    ,         ,r_DA,TILD, AT ,EXLM,QUES,    ,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
@@ -162,9 +181,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
          ,    ,    ,    ,    ,    ,                   ,    ,    ,    ,    ,    ,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
-         ,    ,    ,    ,    ,    ,                   ,rWIN,rOSX,rLNX,    ,    ,
+         ,    ,    ,    ,rNOR,rGAM,                   ,rWIN,rOSX,rLNX,    ,    ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
-         ,RST ,    ,    ,    ,    ,    ,         ,    ,NKRO,    ,    ,    ,    ,
+         ,RST ,    ,    ,    ,    ,    ,         ,NKRO,    ,    ,    ,    ,    ,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                            ,    ,    ,             ,    ,
   //                  `----+----+----'        `----+----+----'
@@ -376,10 +395,11 @@ static bool process_mod_tap_keys(uint16_t keycode, keyrecord_t *record) {
 
 ////////////////////////////////////////
 
-static bool allow_tap = false;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  static bool allow_tap = false;
   static uint16_t semi_timer = 0;
+  static bool is_in_game_layer = false;
+
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
@@ -430,6 +450,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           register_code(KC_SCLN);
           unregister_code(KC_SCLN);
         }
+      }
+      return false;
+      break;
+    case KC_rNOR:
+      default_layer_set(1UL << _QWERTY);
+      is_in_game_layer = false;
+      return false;
+      break;
+    case KC_rGAM:
+      default_layer_set(1UL << _GAME);
+      is_in_game_layer = true;
+      return false;
+      break;
+    case KC_rTOG:
+      if (is_in_game_layer) {
+        is_in_game_layer = false;
+        default_layer_set(1UL << _QWERTY);
+      } else {
+        is_in_game_layer = true;
+        default_layer_set(1UL << _GAME);
       }
       return false;
       break;
