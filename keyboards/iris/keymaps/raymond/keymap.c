@@ -96,6 +96,7 @@ const uint32_t PROGMEM unicode_map[] = {
 #define KC_RSAD RGB_SAD
 #define KC_RVAI RGB_VAI
 #define KC_RVAD RGB_VAD
+#define KC_sINS S(KC_INSERT)
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -141,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      VOLD,rA_T,LEFT,DOWN,RGHT,rTOG,               r_DP,GRV ,DQUO,QUOT,HASH,    ,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
-     MUTE,    ,I3_L,    ,I3_R,    ,    ,         ,r_DA,TILD, AT ,EXLM,QUES,    ,
+     MUTE,    ,I3_L,sINS,I3_R,    ,    ,         ,r_DA,TILD, AT ,EXLM,QUES,    ,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                            ,    ,DEL ,         DEL ,    ,    
   //                  `----+----+----'        `----+----+----'
