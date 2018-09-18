@@ -17,7 +17,3 @@ EXTRAKEY_ENABLE = yes
 NKRO_ENABLE = yes
 UNICODE_ENABLE = no
 UNICODEMAP_ENABLE = yes
-
-ifndef QUANTUM_DIR
-	include ../../../../Makefile
-endif
