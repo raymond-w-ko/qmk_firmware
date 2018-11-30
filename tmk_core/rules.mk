@@ -109,7 +109,6 @@ ifeq ($(RAY_KEYMAP_TARGET_LINUX),true)
     CFLAGS += -D RAY_KEYMAP_TARGET_LINUX=1
 endif
 
-
 #---------------- Compiler Options C++ ----------------
 #  -g*:          generate debugging information
 #  -O*:          optimization level
@@ -384,7 +383,7 @@ check-size:
 	$(eval OVER_SIZE=$(shell expr $(CURRENT_SIZE) - $(MAX_SIZE)))
 	if [ $(MAX_SIZE) -gt 0 ] && [ $(CURRENT_SIZE) -gt 0 ]; then \
 		$(SILENT) || printf "$(MSG_CHECK_FILESIZE)" | $(AWK_CMD); \
-		if [ $(CURRENT_SIZE) -gt $(MAX_SIZE) ]; then $(PRINT_WARNING_PLAIN); $(SILENT) || printf " * $(MSG_FILE_TOO_BIG)" ; else $(PRINT_OK); $(SILENT) || printf " * $(MSG_FILE_JUST_RIGHT)";  fi \
+		if [ $(CURRENT_SIZE) -gt $(MAX_SIZE) ]; then printf "\n * $(MSG_FILE_TOO_BIG)"; $(PRINT_ERROR_PLAIN); else $(PRINT_OK); $(SILENT) || printf " * $(MSG_FILE_JUST_RIGHT)";  fi \
 	fi
 else
 check-size:
