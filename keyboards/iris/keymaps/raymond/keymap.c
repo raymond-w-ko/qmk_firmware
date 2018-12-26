@@ -1,6 +1,4 @@
-#include "action_layer.h"
-#include "eeconfig.h"
-#include "iris.h"
+#include QMK_KEYBOARD_H
 
 #define TAP_DELAY 512
 
