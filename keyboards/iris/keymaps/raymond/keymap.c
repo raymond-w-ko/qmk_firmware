@@ -62,19 +62,19 @@ const uint32_t PROGMEM unicode_map[] = {
     0x03bc,  // μ
 };
 
-#define KC_xx00 (0 | QK_UNICODE_MAP)
-#define KC_xx01 (1 | QK_UNICODE_MAP)
-#define KC_xx02 (2 | QK_UNICODE_MAP)
-#define KC_xx03 (3 | QK_UNICODE_MAP)
-#define KC_xx04 (4 | QK_UNICODE_MAP)
-#define KC_xx05 (5 | QK_UNICODE_MAP)
-#define KC_xx06 (6 | QK_UNICODE_MAP)
-#define KC_xx07 (7 | QK_UNICODE_MAP)
-#define KC_xx08 (8 | QK_UNICODE_MAP)
-#define KC_xx09 (9 | QK_UNICODE_MAP)
-#define KC_xx10 (10 | QK_UNICODE_MAP)
-#define KC_xx11 (11 | QK_UNICODE_MAP)
-#define KC_xx12 (12 | QK_UNICODE_MAP)
+#define KC_xx00 X(0)
+#define KC_xx01 X(1)
+#define KC_xx02 X(2)
+#define KC_xx03 X(3)
+#define KC_xx04 X(4)
+#define KC_xx05 X(5)
+#define KC_xx06 X(6)
+#define KC_xx07 X(7)
+#define KC_xx08 X(8)
+#define KC_xx09 X(9)
+#define KC_xx10 X(10)
+#define KC_xx11 X(11)
+#define KC_xx12 X(12)
 
 ///////////////////////////////////////////////////////////////////////////////
 
