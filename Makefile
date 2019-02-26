@@ -622,12 +622,12 @@ planck-linux-flash:
 	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true planck/rev4:raymond:dfu
 
 iris-win:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true iris/rev2:raymond
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true keebio/iris/rev2:raymond
 iris-linux:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true iris/rev2:raymond
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true keebio/iris/rev2:raymond
 iris-win-flash:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true iris/rev2:raymond:avrdude
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_WIN=true keebio/iris/rev2:raymond:avrdude
 iris-linux-flash:
-	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true iris/rev2:raymond:avrdude
+	make SHELL=/bin/bash RAY_KEYMAP_TARGET_LINUX=true keebio/iris/rev2:raymond:avrdude
 
 .DEFAULT_GOAL := all
