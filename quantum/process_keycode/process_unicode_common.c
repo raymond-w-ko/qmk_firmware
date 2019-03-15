@@ -121,7 +121,7 @@ void unicode_input_finish(void) {
     unregister_code(KC_LALT);
     break;
   case UC_WINC:
-    tap_code(KC_RETURN);
+    tap_code(KC_ENTER);
     break;
   }
 
