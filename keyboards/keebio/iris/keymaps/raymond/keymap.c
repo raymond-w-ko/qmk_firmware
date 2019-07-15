@@ -137,24 +137,24 @@ static bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
         press_two_keys(KC_LCTL, KC_SPC);
         press_key(KC_P);
       }
-      return false;
+      return true;
     case tmux_R:
       if (record->event.pressed) {
         press_two_keys(KC_LCTL, KC_SPC);
         press_key(KC_N);
       }
-      return false;
+      return true;
     // window manager keys
     case gui_L:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_LEFT);
       }
-      return false;
+      return true;
     case gui_R:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_RGHT);
       }
-      return false;
+      return true;
   }
 
   return true;
