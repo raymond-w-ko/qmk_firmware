@@ -5,11 +5,41 @@
 extern keymap_config_t keymap_config;
 
 #define _QWERTY 0
-#define _GAME 1
-#define _LOWER 2
-#define _RAISE 3
-#define _SEMI 4
+#define _GAME   1
+#define _LOWER  2
+#define _RAISE  3
+#define _SEMI   4
+#define _SYM    5
+#define _NAV    6
+#define _NUM    7
+#define _FNC    8
 #define _ADJUST 16
+
+#define oslS OSL(_SYM)
+#define oslN OSL(_NAV)
+#define oslU OSL(_NUM)
+#define oslF OSL(_FNC)
+#define oslJ OSL(_ADJUST)
+
+#define osCS OSM(MOD_LCTL | MOD_LSFT)
+#define osCA OSM(MOD_LCTL | MOD_LALT)
+#define osME OSM(MOD_LGUI)
+#define osHY OSM(MOD_HYPR)
+
+#define LAYOUT_SPECIAL_MOD_kc( \
+    L00, L01, L02, L03, L04, L05,           R00, R01, R02, R03, R04, R05, \
+    L10, L11, L12, L13, L14, L15,           R10, R11, R12, R13, R14, R15, \
+    L20, L21, L22, L23, L24, L25,           R20, R21, R22, R23, R24, R25, \
+    L30, L31, L32, L33, L34, L35, LT4, RT4, R30, R31, R32, R33, R34, R35, \
+                        LT1, LT2, LT3, RT3, RT2, RT1 \
+    ) \
+    LAYOUT( \
+        KC_##L00, KC_##L01, KC_##L02, KC_##L03, KC_##L04, KC_##L05,                     KC_##R00, KC_##R01, KC_##R02, KC_##R03, KC_##R04, KC_##R05, \
+        KC_##L10, KC_##L11, KC_##L12, KC_##L13, KC_##L14, KC_##L15,                     KC_##R10, KC_##R11, KC_##R12, KC_##R13, KC_##R14, KC_##R15, \
+        KC_##L20, KC_##L21, KC_##L22, KC_##L23, KC_##L24, KC_##L25,                     KC_##R20, KC_##R21, KC_##R22, KC_##R23, KC_##R24, KC_##R25, \
+        KC_##L30, KC_##L31, KC_##L32, KC_##L33, KC_##L34, KC_##L35,      LT4,      RT4, KC_##R30, KC_##R31, KC_##R32, KC_##R33, KC_##R34, KC_##R35, \
+                                                     LT1,      LT2,      LT3,      RT3,      RT2,      RT1 \
+    )
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -38,6 +68,8 @@ enum custom_keycodes {
   KC_rNOR,
   KC_rGAM,
   KC_rTOG,
+
+  KC_sTAB,
 
   KC_NKRO,
 };
@@ -78,8 +110,8 @@ const uint32_t PROGMEM unicode_map[] = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#define KC_ KC_TRNS
-#define _______ KC_TRNS
+#define KC_ KC_NO
+/* #define _______ KC_NO */
 
 #define KC_LOWR LOWER
 #define KC_RASE RAISE
@@ -104,17 +136,17 @@ const uint32_t PROGMEM unicode_map[] = {
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_QWERTY] = LAYOUT_kc(
+  [_QWERTY] = LAYOUT_SPECIAL_MOD_kc(
   //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
      ESC , 1  , 2  , 3  , 4  , 5  ,                6  , 7  , 8  , 9  , 0  ,BSPC,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
      TAB , Q  , W  , E  , R  , T  ,                Y  , U  , I  , O  , P  ,BSLS ,
   //|----+----+----+----+----+----|              |----+----+----+----+----+----|
-     rTOG, A  , S  , D  , F  , G  ,                H  , J  , K  , L  ,rSMI,QUOT,
+     rTOG, A  , S  , D  , F  , G  ,                H  , J  , K  , L  ,ENT ,QUOT,
   //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
-      Z  ,LSFT, X  , C  , V  , B  ,LCTL,     RCTL, N  , M  ,COMM,DOT ,RSFT,SLSH,
+      Z  ,LSFT, X  , C  , V  , B  ,oslF,  KC_RCTL, N  , M  ,COMM,DOT ,RSFT,SLSH,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
-                       LGUI,LOWR,ENT ,         SPC ,RASE,LALT
+                    KC_LGUI,oslU,oslN,      KC_SPC ,oslS,KC_LALT
   //                  `----+----+----'        `----+----+----'
   ),
 
@@ -171,6 +203,62 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          ,PLUS,xx03,xx04,ENT ,xx05,    ,         ,xx11,xx12,    ,    ,    ,    ,
   //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
                            ,    ,    ,             ,    ,
+  //                  `----+----+----'        `----+----+----'
+  ),
+
+  [_SYM] = LAYOUT_SPECIAL_MOD_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+         ,    ,    ,    ,    ,    ,                   ,    ,    ,    ,    ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,LABK,MINS,DQUO,PLUS,SCLN,               GRV ,RBRC,RPRN,RCBR,PIPE,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,RABK,UNDS,QUOT,EQL ,COLN,               BSPC,LBRC,LPRN,LCBR,AMPR,    ,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+         ,EXLM,ASTR, AT ,SLSH,QUES,osME,     osCA,TILD,DLR ,HASH,BSLS,PERC,    ,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                      KC_NO,osHY,oslN,         osCS,oslN,KC_NO
+  //                  `----+----+----'        `----+----+----'
+  ),
+
+  [_NAV] = LAYOUT_SPECIAL_MOD_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+         ,    ,    ,    ,    ,    ,                   ,    ,    ,    ,    ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,ENT ,sTAB,ESC ,TAB ,DEL ,               sTAB,PGUP,UP  ,PGDN,APP ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,LWIN,LCTL,LSFT,LALT,BSPC,               BSPC,LEFT,DOWN,RGHT,ENT ,    ,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+         ,EXLM,ASTR, AT ,SLSH,QUES,oslF,   KC_F13,TAB ,HOME,DEL ,END ,INS ,    ,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                      KC_NO,KC_T,  oslN,   KC_SPC,oslS,KC_NO
+  //                  `----+----+----'        `----+----+----'
+  ),
+
+  [_NUM] = LAYOUT_SPECIAL_MOD_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+         ,    ,    ,    ,    ,    ,                   ,    ,    ,    ,    ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,COMM,sTAB, UP ,TAB ,DEL ,               MINS, 7  , 8  , 9  ,ASTR,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         , P0 ,LEFT,DOWN,RGHT,QUOT,               BSPC, 4  , 5  , 6  ,ENT ,    ,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+         ,CAPS,LPRN,PERC,RPRN,    ,oslS,   KC_EQL,PLUS, 1  , 2  , 3  ,SLSH,    ,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                      KC_NO,KC_NO,oslN,     KC_0 ,KC_DOT,KC_NO
+  //                  `----+----+----'        `----+----+----'
+  ),
+
+  [_FNC] = LAYOUT_SPECIAL_MOD_kc(
+  //,----+----+----+----+----+----.              ,----+----+----+----+----+----.
+         ,    ,    ,    ,    ,    ,                   ,    ,    ,    ,    ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         , P  , O  , I  , U  , Y  ,               LALT, F7 , F8 , F9 ,F11 ,    ,
+  //|----+----+----+----+----+----|              |----+----+----+----+----+----|
+         ,SCLN, L  , K  , J  , H  ,               LSFT, F4 , F5 , F6 ,F10 ,    ,
+  //|----+----+----+----+----+----+----.    ,----|----+----+----+----+----+----|
+         ,SLSH,DOT ,COMM, M  , N  ,oslS,   KC_NO ,LCTL, F1 , F2 , F3 ,F12 ,    ,
+  //`----+----+----+--+-+----+----+----/    \----+----+----+----+----+----+----'
+                      KC_NO,oslJ,oslN,   KC_CAPS,KC_LWIN,KC_NO
   //                  `----+----+----'        `----+----+----'
   ),
 
@@ -297,6 +385,11 @@ static bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
     case KC_I3_R:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_RGHT);
+      }
+      return false;
+    case KC_sTAB:
+      if (record->event.pressed) {
+        press_two_keys(KC_LSFT, KC_TAB);
       }
       return false;
   }

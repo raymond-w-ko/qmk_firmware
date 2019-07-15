@@ -35,4 +35,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
 
-#define STRICT_LAYER_RELEASE
+//#define STRICT_LAYER_RELEASE
