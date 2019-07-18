@@ -78,16 +78,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_NUM] = LAYOUT(
   _,       _,       _,       _,       _,       _,                                  _,       _,       _,       _,       _,       _,
   _,       KC_PCMM, tmux_L,  KC_UP,   tmux_R,  KC_CIRC,                            KC_PMNS, KC_P7,   KC_P8,   KC_P9,   KC_PAST, _,
-  _,       osm_GUI, KC_LEFT, KC_DOWN, KC_RGHT, KC_QUOT,                            KC_BSPC, KC_P4,   KC_P5,   KC_P6,   KC_PENT, _,
-  _,       _,       gui_L,   sINS,    gui_R,   _,       osl_FNC,          KC_PEQL, KC_PPLS, KC_P1,   KC_P2,   KC_P3,   KC_PSLS, _,
-                                      _,       KC_T,    osl_NAV,          KC_P0,   KC_PDOT, _
+  _,       _,       KC_LEFT, KC_DOWN, KC_RGHT, KC_QUOT,                            KC_BSPC, KC_P4,   KC_P5,   KC_P6,   KC_PENT, _,
+  _,       _,       gui_L,   sINS,    gui_R,   _,       osl_SYM,          KC_PEQL, KC_PPLS, KC_P1,   KC_P2,   KC_P3,   KC_PSLS, _,
+                                      _,       _,       osl_NAV,          KC_P0,   KC_PDOT, _
 ),
 
 [_FNC] = LAYOUT(
   _,       _,       _,       _,       _,       _,                                  _,       _,       _,       _,       _,       _,
-  _,       KC_P,    KC_O,    KC_I,    KC_U,    KC_Y,                               KC_LALT, KC_F7,   KC_F8,   KC_F9,   KC_F11,  _,
-  _,       KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,                               KC_LSFT, KC_F4,   KC_F5,   KC_F6,   KC_F10,  _,
-  _,       KC_SLSH, KC_DOT,  KC_COMM, KC_M,    KC_N,    osl_MOU,          _,       KC_LCTL, KC_F1,   KC_F2,   KC_F3,   KC_F12,  _,
+  _,       KC_P,    KC_O,    KC_I,    KC_U,    KC_Y,                               osm_ALT, KC_F7,   KC_F8,   KC_F9,   KC_F11,  _,
+  _,       KC_SCLN, KC_L,    KC_K,    KC_J,    KC_H,                               osm_SFT, KC_F4,   KC_F5,   KC_F6,   KC_F10,  _,
+  _,       KC_SLSH, KC_DOT,  KC_COMM, KC_M,    KC_N,    osl_MOU,          _,       osm_CTL, KC_F1,   KC_F2,   KC_F3,   KC_F12,  _,
                                       _,       osl_SYS, osl_NAV,          KC_CAPS, KC_LGUI, _
 ),
 
@@ -137,24 +137,24 @@ static bool process_my_keys(uint16_t keycode, keyrecord_t *record) {
         press_two_keys(KC_LCTL, KC_SPC);
         press_key(KC_P);
       }
-      return true;
+      return true; // maintain one shot layer behavior
     case tmux_R:
       if (record->event.pressed) {
         press_two_keys(KC_LCTL, KC_SPC);
         press_key(KC_N);
       }
-      return true;
+      return true; // maintain one shot layer behavior
     // window manager keys
     case gui_L:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_LEFT);
       }
-      return true;
+      return true; // maintain one shot layer behavior
     case gui_R:
       if (record->event.pressed) {
         press_two_keys(KC_LGUI, KC_RGHT);
       }
-      return true;
+      return true; // maintain one shot layer behavior
   }
 
   return true;
