@@ -396,6 +396,9 @@ show_path:
 	@echo SRC=$(SRC)
 	@echo OBJ=$(OBJ)
 
+objs-size:
+	for i in $(OBJ); do echo $$i; done | sort | xargs $(SIZE)
+
 ifeq ($(findstring avr-gcc,$(CC)),avr-gcc)
 SIZE_MARGIN = 1024
 
@@ -419,7 +422,7 @@ check-size:
 	fi
 else
 check-size:
-	echo "(Firmware size check does not yet support $(MCU) microprocessors; skipping.)"
+	$(SILENT) || echo "(Firmware size check does not yet support $(MCU) microprocessors; skipping.)"
 endif
 
 # Create build directory
