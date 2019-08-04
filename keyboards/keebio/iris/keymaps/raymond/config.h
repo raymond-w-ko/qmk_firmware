@@ -9,6 +9,11 @@
 // #define MASTER_RIGHT
 // #define EE_HANDS
 
+#undef DEBOUNCE_DELAY
+#define DEBOUNCE_DELAY 0
+#undef DEBOUNCE
+#define DEBOUNCE 5
+
 // RGB
 #undef RGBLED_NUM
 #define RGBLIGHT_ANIMATIONS
