@@ -170,3 +170,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   return true;
 }
+
+////////////////////////////////////////
+
+void process_console_data_user(uint8_t* data, uint8_t length) {
+  if (length == 0) return;
+
+  switch (data[0]) {
+    case 0x01:
+      // reserved by system
+      break;
+    case 0x02:
+      default_layer_set(1UL << _BASE);
+      break;
+    case 0x03:
+      default_layer_set(1UL << _GAME);
+      break;
+    case 0xFE:
+      // reserved by system
+      break;
+  }
+}
