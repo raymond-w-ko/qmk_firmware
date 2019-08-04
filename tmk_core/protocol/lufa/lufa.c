@@ -231,6 +231,14 @@ static void raw_hid_task(void)
  * Console
  ******************************************************************************/
 #ifdef CONSOLE_ENABLE
+
+static bool console_flush = false;
+#define CONSOLE_FLUSH_SET(b)   do { \
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {\
+    console_flush = b; \
+  } \
+} while (0)
+
 /** \brief Console Task
  *
  * FIXME: Needs doc
@@ -243,7 +251,11 @@ static void Console_Task(void)
 
     uint8_t ep = Endpoint_GetCurrentEndpoint();
 
-#if 0
+#ifdef CONSOLE_IN_ENABLE
+    /* Create a temporary buffer to hold the read in report from the host */
+    uint8_t ConsoleData[CONSOLE_EPSIZE];
+    bool data_read = false;
+
     // TODO: impl receivechar()/recvchar()
     Endpoint_SelectEndpoint(CONSOLE_OUT_EPNUM);
 
@@ -253,35 +265,40 @@ static void Console_Task(void)
         /* Check to see if the packet contains data */
         if (Endpoint_IsReadWriteAllowed())
         {
-            /* Create a temporary buffer to hold the read in report from the host */
-            uint8_t ConsoleData[CONSOLE_EPSIZE];
-
             /* Read Console Report Data */
             Endpoint_Read_Stream_LE(&ConsoleData, sizeof(ConsoleData), NULL);
-
-            /* Process Console Report Data */
-            //ProcessConsoleHIDReport(ConsoleData);
+            data_read = true;
         }
 
         /* Finalize the stream transfer to send the last packet */
         Endpoint_ClearOUT();
+
+        if (data_read) {
+          /* Process Console Report Data */
+          process_console_data_quantum(ConsoleData, sizeof(ConsoleData));
+        }
     }
 #endif
 
-    /* IN packet */
-    Endpoint_SelectEndpoint(CONSOLE_IN_EPNUM);
-    if (!Endpoint_IsEnabled() || !Endpoint_IsConfigured()) {
+    if (console_flush) {
+      /* IN packet */
+      Endpoint_SelectEndpoint(CONSOLE_IN_EPNUM);
+      if (!Endpoint_IsEnabled() || !Endpoint_IsConfigured()) {
         Endpoint_SelectEndpoint(ep);
         return;
-    }
+      }
 
-    // fill empty bank
-    while (Endpoint_IsReadWriteAllowed())
+      // fill empty bank
+      while (Endpoint_IsReadWriteAllowed())
         Endpoint_Write_8(0);
 
-    // flash senchar packet
-    if (Endpoint_IsINReady()) {
+      // flash senchar packet
+      if (Endpoint_IsINReady()) {
         Endpoint_ClearIN();
+      }
+
+      // CONSOLE_FLUSH_SET(false);
+      console_flush = false;
     }
 
     Endpoint_SelectEndpoint(ep);
@@ -371,13 +388,7 @@ void EVENT_USB_Device_WakeUp()
 
 
 
-#ifdef CONSOLE_ENABLE
-static bool console_flush = false;
-#define CONSOLE_FLUSH_SET(b)   do { \
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {\
-    console_flush = b; \
-  } \
-} while (0)
+#if 0
 
 /** \brief Event USB Device Start Of Frame
  *
@@ -390,9 +401,9 @@ void EVENT_USB_Device_StartOfFrame(void)
     if (++count % 50) return;
     count = 0;
 
-    if (!console_flush) return;
+    // if (!console_flush) return;
     Console_Task();
-    console_flush = false;
+    // console_flush = false;
 }
 
 #endif
@@ -438,7 +449,7 @@ void EVENT_USB_Device_ConfigurationChanged(void)
     /* Setup Console HID Report Endpoints */
     ConfigSuccess &= ENDPOINT_CONFIG(CONSOLE_IN_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
                                      CONSOLE_EPSIZE, ENDPOINT_BANK_SINGLE);
-#if 0
+#ifdef CONSOLE_IN_ENABLE
     ConfigSuccess &= ENDPOINT_CONFIG(CONSOLE_OUT_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_OUT,
                                      CONSOLE_EPSIZE, ENDPOINT_BANK_SINGLE);
 #endif
@@ -1015,7 +1026,7 @@ static void setup_usb(void)
     USB_Init();
 
     // for Console_Task
-    USB_Device_EnableSOFEvents();
+    // USB_Device_EnableSOFEvents();
     print_set_sendchar(sendchar);
 }
 
@@ -1097,6 +1108,10 @@ int main(void)
 
 #ifdef RAW_ENABLE
         raw_hid_task();
+#endif
+
+#ifdef CONSOLE_ENABLE
+        Console_Task();
 #endif
 
 #if !defined(INTERRUPT_CONTROL_ENDPOINT)
