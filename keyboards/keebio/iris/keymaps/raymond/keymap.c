@@ -45,12 +45,44 @@ enum custom_keycodes {
 #define KC_ KC_NO
 #define _ KC_NO
 
+///////////////////////////////////////////////////////////////////////////////
+
+const uint32_t PROGMEM unicode_map[] = {
+    0x03b8,  // θ
+    0x03c1,  // ρ
+    0x03c6,  // φ
+    0x03c7,  // χ
+    0x03c3,  // σ
+    0x03b2,  // β
+    0x03c5,  // υ
+    0x03c8,  // ψ
+    0x03c0,  // π
+    0x03b7,  // η
+    0x03ba,  // κ
+    0x03bd,  // ν
+    0x03bc,  // μ
+};
+
+#define KC_xx00 X(0)
+#define KC_xx01 X(1)
+#define KC_xx02 X(2)
+#define KC_xx03 X(3)
+#define KC_xx04 X(4)
+#define KC_xx05 X(5)
+#define KC_xx06 X(6)
+#define KC_xx07 X(7)
+#define KC_xx08 X(8)
+#define KC_xx09 X(9)
+#define KC_xx10 X(10)
+#define KC_xx11 X(11)
+#define KC_xx12 X(12)
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_BASE] = LAYOUT(
   KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
-  df_GAME, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_ENT,  KC_QUOT,
+  KC_LEFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_ENT,  KC_RGHT,
   KC_Z,    KC_LSFT, KC_X,    KC_C,    KC_V,    KC_B,    osl_FNC,          KC_LCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
                                       KC_LGUI, osl_NUM, osl_NAV,          KC_SPC,  osl_SYM, KC_LALT
 ),
