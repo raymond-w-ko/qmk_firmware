@@ -1,7 +1,7 @@
 #pragma once
 
 // needed for process_console_data_user()
-#define CONSOLE_IN_ENABLE
+// #define CONSOLE_IN_ENABLE
 
 // Use I2C or Serial, not both
 // #define USE_SERIAL

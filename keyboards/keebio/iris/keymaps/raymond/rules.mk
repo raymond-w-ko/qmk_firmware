@@ -11,9 +11,9 @@ SLEEP_LED_ENABLE = no
 AUDIO_ENABLE = no
 
 # features I do use
-CONSOLE_ENABLE = yes
-# EXTRAKEY_ENABLE is needed for audio control keys
-EXTRAKEY_ENABLE = yes
+CONSOLE_ENABLE = no
+RAW_ENABLE = yes
+EXTRAKEY_ENABLE = yes # EXTRAKEY_ENABLE is needed for audio control keys
 NKRO_ENABLE = yes
 UNICODE_ENABLE = no
 UNICODEMAP_ENABLE = yes

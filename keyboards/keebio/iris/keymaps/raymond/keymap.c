@@ -2,17 +2,20 @@
 
 extern keymap_config_t keymap_config;
 
-#define _BASE 0
-#define _GAME 1
-#define _SYM  2
-#define _NAV  3
-#define _NUM  4
-#define _FNC  5
-#define _MOU  6
-#define _SYS  7
+#define  _BASE 0
+#define _GAME0 1
+#define _GAME1 2
+#define   _SYM 3
+#define   _NAV 4
+#define   _NUM 5
+#define   _FNC 6
+#define   _MOU 7
+#define   _SYS 8
 
 #define df_BASE DF(_BASE)
-#define df_GAME DF(_GAME)
+#define df_GAM0 DF(_GAME0)
+#define df_GAM1 DF(_GAME1)
+#define lt_FNC LT(_FNC, KC_F13)
 
 #define osl_SYM OSL(_SYM)
 #define osl_NAV OSL(_NAV)
@@ -83,15 +86,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   KC_LEFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_ENT,  KC_RGHT,
-  KC_Z,    KC_LSFT, KC_X,    KC_C,    KC_V,    KC_B,    osl_FNC,          KC_LCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
+  KC_Z,    KC_LSFT, KC_X,    KC_C,    KC_V,    KC_B,     lt_FNC,          KC_LCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
                                       KC_LGUI, osl_NUM, osl_NAV,          KC_SPC,  osl_SYM, KC_LALT
 ),
-[_GAME] = LAYOUT(
+[_GAME0] = LAYOUT(
+  KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+  KC_LEFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_ENT,  KC_RGHT,
+  KC_Z,    KC_LSFT, KC_X,    KC_C,    KC_V,    KC_B,     lt_FNC,          KC_LCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
+                                      KC_LALT, osl_NUM, KC_SPC,           KC_SPC,  osl_SYM, KC_LALT
+),
+[_GAME1] = LAYOUT(
   KC_ESC,  KC_5,    KC_1,    KC_2,    KC_3,    KC_4,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
   KC_T,    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   KC_G,    KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_ENT,  KC_QUOT,
-  KC_B,    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_LALT,          KC_RCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
-                                      df_BASE, osl_NUM, KC_SPC,           KC_SPC,  osl_SYM, KC_LALT
+  KC_B,    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    lt_FNC,          KC_RCTL, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_RSFT, KC_SLSH,
+                                      KC_LALT, osl_NUM, KC_SPC,           KC_SPC,  osl_SYM, KC_LALT
 ),
 [_SYM] = LAYOUT(
   _,       _,       _,       _,       _,       _,                                  _,       _,       _,       _,       _,       _,
@@ -205,21 +215,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 ////////////////////////////////////////
 
-void process_console_data_user(uint8_t* data, uint8_t length) {
+static void process_host_input(uint8_t* data, uint8_t length) {
   if (length == 0) return;
 
   switch (data[0]) {
-    case 0x01:
-      // reserved by system
+    case 0x01: // reserved by system
       break;
     case 0x02:
       default_layer_set(1UL << _BASE);
       break;
     case 0x03:
-      default_layer_set(1UL << _GAME);
+      default_layer_set(1UL << _GAME0);
       break;
-    case 0xFE:
-      // reserved by system
+    case 0x04:
+      default_layer_set(1UL << _GAME1);
+      break;
+    case 0xFE: // reserved by system
       break;
   }
+}
+
+void process_console_data_user(uint8_t* data, uint8_t length) {
+  process_host_input(data, length);
+}
+
+void raw_hid_receive(uint8_t* data, uint8_t length) {
+  process_host_input(data, length);
 }
